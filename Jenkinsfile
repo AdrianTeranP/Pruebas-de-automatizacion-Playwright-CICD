@@ -1,10 +1,14 @@
 pipeline {
     agent any
+    environment {
+    BASE_URL = credentials('BASE_URL')
+}
 
     options {
         timeout(time: 60, unit: 'MINUTES')
         timestamps()
     }
+    
 
     stages {
 
