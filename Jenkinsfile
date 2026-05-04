@@ -32,7 +32,7 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                bat 'npx playwright test --reporter=html,line,junit'
+                bat 'npx playwright test --reporter=html,line,junit --output=test-results'
             }
         }
 
