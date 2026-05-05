@@ -34,10 +34,15 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: process.env.BASE_URL,
+   /*headless: false,        // Muestra el navegador*/
+    launchOptions: {
+        slowMo: 1000,  
+        },
+           },     // 1 segundo entre cada acción*/
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-  },
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer 
+    trace: 'on-first-retry',*/
+  
 
   /* Configure projects for major browsers */
   projects: [
