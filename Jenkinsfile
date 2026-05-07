@@ -1,14 +1,17 @@
 pipeline {
     agent any
+
     environment {
-    BASE_URL = credentials('BASE_URL')
-}
+        BASE_URL    = credentials('BASE_URL')
+        EMPRESA_URL = credentials('EMPRESA_URL')
+    }
 
     options {
         timeout(time: 60, unit: 'MINUTES')
         timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
     }
-    
 
     stages {
 
@@ -30,9 +33,15 @@ pipeline {
             }
         }
 
-        stage('Run tests') {
+        stage('Tests Sauce Demo') {
             steps {
-                bat 'npx playwright test'
+                bat 'npx playwright test --project=saucedemo-chrome --project=saucedemo-firefox --project=saucedemo-safari --project=saucedemo-edge'
+            }
+        }
+
+        stage('Tests Mi Empresa') {
+            steps {
+                bat 'npx playwright test --project=mi-empresa-chrome --project=mi-empresa-firefox --project=mi-empresa-safari --project=mi-empresa-edge'
             }
         }
 
@@ -40,12 +49,10 @@ pipeline {
 
     post {
         always {
-
             archiveArtifacts(
                 artifacts   : 'playwright-report/**',
                 fingerprint : true
             )
-
             publishHTML(target: [
                 reportDir            : 'playwright-report',
                 reportFiles          : 'index.html',
@@ -54,13 +61,14 @@ pipeline {
                 allowMissing         : false,
                 alwaysLinkToLastBuild: true
             ])
-
             junit(
                 allowEmptyResults : true,
-                testResults       : 'test-results/*.xml'
+                testResults       : 'test-results/junit.xml'
             )
-
         }
+        success  { echo '✅ Pipeline ejecutado correctamente' }
+        failure  { echo '❌ El pipeline falló, revisa los logs' }
+        unstable { echo '⚠️ Hay tests fallidos' }
     }
 
 }
