@@ -11,17 +11,19 @@ export default defineConfig({
     workers: process.env.CI ? 1 : undefined,
 
     reporter: [
-        ['html'],
-        ['junit', { outputFile: 'test-results/junit.xml' }],
-        ['line'],
-    ],
+    ['html'],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['line'],
+],
 
     use: {
-        trace: 'on-first-retry',
-        //unchOptions: {
-           //lowMo: 1000,
-       //,
+    trace: 'on',           // 🎬 Trace completo de cada test
+    video: 'on',           // 🎥 Graba video de cada test
+    screenshot: 'on',      // 📸 Captura automática en cada paso
+    launchOptions: {
+        slowMo: 1000,
     },
+},
 
     projects: [
 
@@ -97,6 +99,7 @@ export default defineConfig({
                 channel: 'msedge',
                 baseURL: process.env.EMPRESA_URL,
             },
+            
         },
 
     ],

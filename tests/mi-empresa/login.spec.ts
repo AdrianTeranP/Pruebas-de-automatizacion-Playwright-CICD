@@ -45,6 +45,9 @@ test.describe('Login - Mi Empresa', () => {
 
         // 8. Verificar que el modal se cerró
         await expect(btnCerrarModal).not.toBeVisible({ timeout: 5000 });
+
+        // 9. ⏱️ Mantener el Home visible por 10 segundos
+        await page.waitForTimeout(10000);
     });
 
 });
